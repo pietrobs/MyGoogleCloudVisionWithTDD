@@ -2,12 +2,13 @@ const fs = require("fs");
 
 const Writer = {
   save(path, content) {
-    fs.writeFile(path, JSON.stringify(content), err => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      //file written successfully
+    return new Promise((resolve, reject) => {
+      fs.writeFile(path, JSON.stringify(content), err => {
+        if (err) {
+          reject(err);
+        }
+        resolve(true);
+      });
     });
   }
 };

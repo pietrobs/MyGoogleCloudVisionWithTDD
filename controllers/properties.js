@@ -9,8 +9,8 @@ const faceDetector = {
     };
 
     try {
-      const result = await client.faceDetection(request);
-      this.save("responses/face-detection.json", result);
+      const result = await client.imageProperties(inputFile);
+      this.save("responses/properties-detection.json", result);
       this.crop(inputFile, result);
       return true;
     } catch (err) {
@@ -37,12 +37,12 @@ const faceDetector = {
   },
 
   crop(inputFile, result) {
-    const faces = result[0].faceAnnotations;
-    faces.forEach((face, i) => {
+    const hints = result[0].cropHintsAnnotation.cropHints;
+    hints.forEach((hint, i) => {
       Cropper.crop(
         inputFile,
-        face.boundingPoly.vertices,
-        `results/images/detection-face-${i}.jpg`
+        hint.boundingPoly.vertices,
+        `results/images/detection-properties-${i}.jpg`
       );
     });
   }

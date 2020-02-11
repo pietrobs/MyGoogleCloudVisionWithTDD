@@ -5,15 +5,29 @@ const Writer = require("../helpers/Writer");
 const Reader = require("../helpers/Reader");
 
 const textDetector = {
-  async detect(request, inputFile) {
-    const result = await client.textDetection(request);
-    this.save('responses/text-detection.json', result);
-    this.crop(inputFile, result);
+  async detect(inputFile) {
+    const request = {
+      image: { source: { filename: inputFile } }
+    };
+
+    try {
+      const result = await client.textDetection(request);
+      this.save("responses/text-detection.json", result);
+      this.crop(inputFile, result);
+      return true;
+    } catch (err) {
+      return err;
+    }
   },
 
   detectFromJson(path, inputFile) {
-    const result = this.read(path);
-    this.crop(inputFile, result);
+    try {
+      const result = this.read(path);
+      this.crop(inputFile, result);
+      return true;
+    } catch (err) {
+      return err;
+    }
   },
 
   save(path, content) {
